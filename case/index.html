@@ -4,168 +4,847 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Case Overview | Vibe Check</title>
+  <title>Case Portal | Vibe Check</title>
   <meta name="robots" content="noindex,nofollow" />
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-
-  <link rel="stylesheet" href="../css/style.css">
-
   <style>
-    /* Specific overrides for this page */
-    .grid-dashboard {
-      display: grid;
-      grid-template-columns: 2fr 1fr;
-      gap: var(--space-6);
-      margin-top: var(--space-6);
+    /* --- CSS VARIABLES & RESET --- */
+    :root {
+      --color-bg: #F8FAFC;
+      --color-surface: #FFFFFF;
+      --color-surface-hover: #F1F5F9;
+      --color-border-subtle: #E2E8F0;
+      --color-border-focus: #CBD5E1;
+      --color-text-primary: #0F172A;
+      --color-text-secondary: #64748B;
+      --color-text-tertiary: #94A3B8;
+
+      --color-action: #334155;
+      --color-action-hover: #1E293B;
+      --color-focus-ring: rgba(148, 163, 184, 0.2);
+
+      --color-success: #10B981;
+      --color-danger: #EF4444;
+      --color-warning: #F59E0B;
+      --color-link: #3B82F6;
+
+      --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+
+      --radius-sm: 4px;
+      --radius-md: 8px;
+      --radius-lg: 12px;
+
+      --space-2: 8px;
+      --space-3: 12px;
+      --space-4: 16px;
+      --space-6: 24px;
+      --space-sidebar: 240px;
     }
 
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: var(--font-sans);
+      background: var(--color-bg);
+      color: var(--color-text-primary);
+      line-height: 1.5;
+      height: 100vh;
+      display: flex;
+      overflow: hidden;
+    }
+
+    /* --- LAYOUT --- */
+    .app-shell {
+      display: flex;
+      width: 100%;
+      height: 100%;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: var(--space-sidebar);
+      background: var(--color-surface);
+      border-right: 1px solid var(--color-border-subtle);
+      display: flex;
+      flex-direction: column;
+      padding: var(--space-4);
+      flex-shrink: 0;
+    }
+
+    .brand {
+      font-weight: 600;
+      font-size: 16px;
+      margin-bottom: 32px;
+      padding-left: 12px;
+      color: var(--color-text-primary);
+    }
+
+    .nav-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 12px;
+      border-radius: var(--radius-md);
+      color: var(--color-text-secondary);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      transition: all 150ms ease;
+    }
+
+    .nav-item:hover {
+      background: var(--color-surface-hover);
+      color: var(--color-text-primary);
+    }
+
+    .nav-item[aria-current="page"] {
+      background: var(--color-surface-hover);
+      color: var(--color-action);
+      font-weight: 600;
+      box-shadow: inset 3px 0 0 var(--color-action);
+      /* Left Accent */
+    }
+
+    .nav-item svg {
+      width: 18px;
+      height: 18px;
+      stroke: currentColor;
+      stroke-width: 2;
+      fill: none;
+    }
+
+    /* Main Content */
+    .main-content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 40px;
+      position: relative;
+    }
+
+    .panel {
+      max-width: 1000px;
+      margin: 0 auto;
+      display: none;
+      /* Hidden by default */
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity 250ms ease, transform 250ms ease;
+    }
+
+    .panel.active {
+      display: block;
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* --- COMPONENTS --- */
+
+    /* Typography */
+    h1 {
+      font-size: 24px;
+      font-weight: 600;
+      margin: 0 0 8px 0;
+    }
+
+    h2 {
+      font-size: 18px;
+      font-weight: 600;
+      margin: 0 0 16px 0;
+    }
+
+    h3 {
+      font-size: 14px;
+      font-weight: 600;
+      margin: 0 0 8px 0;
+      text-transform: uppercase;
+      color: var(--color-text-secondary);
+      letter-spacing: 0.05em;
+    }
+
+    p {
+      margin: 0 0 16px 0;
+      color: var(--color-text-secondary);
+      font-size: 14px;
+    }
+
+    .text-small {
+      font-size: 12px;
+    }
+
+    /* Cards */
+    .card {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      margin-bottom: 24px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    /* Filters / Search */
+    .toolbar {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 24px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .search-input {
+      padding: 8px 12px;
+      border: 1px solid var(--color-border-subtle);
+      border-radius: var(--radius-md);
+      font-size: 14px;
+      min-width: 240px;
+      font-family: inherit;
+    }
+
+    .search-input:focus {
+      outline: 2px solid var(--color-focus-ring);
+      border-color: var(--color-border-focus);
+    }
+
+    .chip {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border-subtle);
+      padding: 6px 12px;
+      border-radius: 99px;
+      font-size: 12px;
+      font-weight: 500;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .chip.active {
+      background: var(--color-action);
+      color: white;
+      border-color: var(--color-action);
+    }
+
+    /* Status Pills */
+    .status {
+      display: inline-flex;
+      padding: 2px 8px;
+      border-radius: 99px;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    .st-produced {
+      background: #ECFDF5;
+      color: #059669;
+    }
+
+    .st-missing {
+      background: #FEF2F2;
+      color: #DC2626;
+    }
+
+    .st-destroyed {
+      background: #F3F4F6;
+      color: #4B5563;
+    }
+
+    .st-pending {
+      background: #FFFBEB;
+      color: #D97706;
+    }
+
+    /* --- PANEL SPECIFIC --- */
+
+    /* Timeline */
+    .timeline {
+      position: relative;
+      padding-left: 24px;
+    }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 7px;
+      top: 8px;
+      bottom: 0;
+      width: 2px;
+      background: var(--color-border-subtle);
+    }
+
+    .t-item {
+      position: relative;
+      margin-bottom: 24px;
+    }
+
+    .t-marker {
+      position: absolute;
+      left: -21px;
+      top: 4px;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: white;
+      border: 2px solid var(--color-text-tertiary);
+      z-index: 1;
+    }
+
+    .t-item:hover .t-marker {
+      border-color: var(--color-action);
+      background: var(--color-surface-hover);
+    }
+
+    .t-header {
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+    }
+
+    .t-body {
+      max-height: 0;
+      overflow: hidden;
+      opacity: 0;
+      transition: max-height 250ms ease, opacity 250ms ease;
+      padding-top: 0;
+    }
+
+    .t-item.expanded .t-body {
+      max-height: 500px;
+      opacity: 1;
+      padding-top: 8px;
+    }
+
+    /* Tables */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+
+    th,
+    td {
+      text-align: left;
+      padding: 12px;
+      border-bottom: 1px solid var(--color-border-subtle);
+    }
+
+    th {
+      color: var(--color-text-secondary);
+      font-weight: 500;
+      font-size: 12px;
+      text-transform: uppercase;
+      cursor: pointer;
+    }
+
+    tr:hover td {
+      background: var(--color-surface-hover);
+    }
+
+    /* Email Thread */
+    .thread {
+      border: 1px solid var(--color-border-subtle);
+      border-radius: var(--radius-md);
+      margin-bottom: 12px;
+      background: white;
+    }
+
+    .thread-header {
+      padding: 16px;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .thread-body {
+      padding: 0 16px 16px;
+      border-top: 1px solid var(--color-border-subtle);
+      display: none;
+      margin-top: 8px;
+      font-family: monospace;
+      font-size: 13px;
+      color: var(--color-text-primary);
+    }
+
+    .thread.expanded .thread-body {
+      display: block;
+    }
+
+    .thread.expanded {
+      border-color: var(--color-border-focus);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    }
+
+    /* Mobile */
     @media (max-width: 768px) {
-      .grid-dashboard {
+      body {
+        flex-direction: column;
+        overflow: auto;
+        height: auto;
+      }
+
+      .sidebar {
+        width: 100%;
+        border-right: none;
+        border-bottom: 1px solid var(--color-border-subtle);
+        padding: 12px;
+      }
+
+      .nav-list {
+        flex-direction: row;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+      }
+
+      .nav-item span {
+        display: none;
+      }
+
+      /* Show icon only on really small screens if needed, or keeping text for now */
+      .main-content {
+        padding: 20px;
+      }
+
+      .grid-2,
+      .grid-3 {
         grid-template-columns: 1fr;
       }
-    }
-
-    .status-dot {
-      height: 8px;
-      width: 8px;
-      border-radius: 50%;
-      display: inline-block;
-      margin-right: 6px;
-    }
-
-    .bg-green {
-      background: var(--color-success);
-    }
-
-    .bg-red {
-      background: var(--color-danger);
-    }
-
-    .bg-amber {
-      background: var(--color-warning);
     }
   </style>
 </head>
 
 <body>
-  <div class="container animate-enter">
-    <!-- Header -->
-    <div class="row" style="justify-content: space-between; margin-bottom: var(--space-8);">
-      <div>
-        <div class="badge"><span class="status-dot bg-green"></span>Active Remediation</div>
-        <h1>The Vibe Check Project</h1>
-        <p class="text-muted">Case #2024-VC-001 • Updated 2 hours ago</p>
-      </div>
-      <div>
-        <a href="/" class="btn">Back to Portal</a>
-      </div>
-    </div>
 
-    <!-- Top Row: Parties & Dates -->
-    <div class="grid" style="margin-top: 0; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));">
-      <div class="card animate-enter delay-1">
-        <div class="card-header">
-          <h2>Parties</h2>
-        </div>
-        <div class="mb-4">
-          <div class="text-small text-muted">PLAINTIFF</div>
-          <div style="font-weight: 500;">Vibe Check Corp.</div>
-        </div>
-        <div>
-          <div class="text-small text-muted">DEFENDANT</div>
-          <div style="font-weight: 500;">Bad Vibes LLC</div>
-        </div>
-      </div>
+  <!-- EDIT INSTRUCTIONS: Edit the JSON arrays in the <script> block below to update case data. -->
 
-      <div class="card animate-enter delay-1">
-        <div class="card-header">
-          <h2>Key Dates</h2>
-        </div>
-        <div class="row"
-          style="margin-top:0; justify-content: space-between; border-bottom: 1px solid var(--color-border-subtle); padding-bottom: 8px; margin-bottom: 8px;">
-          <span class="text-small">Complaint Filed</span>
-          <span class="text-small" style="font-variant-numeric: tabular-nums;">Jan 10, 2024</span>
-        </div>
-        <div class="row" style="margin-top:0; justify-content: space-between; color: var(--color-warning);">
-          <span class="text-small" style="font-weight: 500;">Discovery Deadline</span>
-          <span class="text-small" style="font-variant-numeric: tabular-nums;">Feb 14, 2024</span>
-        </div>
-      </div>
+  <div class="app-shell">
+    <!-- SIDEBAR -->
+    <nav class="sidebar">
+      <div class="brand">Vibe Check Portal</div>
+      <ul class="nav-list">
+        <li><a href="#overview" class="nav-item" id="nav-overview">
+            <svg viewBox="0 0 24 24">
+              <rect x="3" y="3" width="7" height="7"></rect>
+              <rect x="14" y="3" width="7" height="7"></rect>
+              <rect x="14" y="14" width="7" height="7"></rect>
+              <rect x="3" y="14" width="7" height="7"></rect>
+            </svg>
+            <span>Overview</span>
+          </a></li>
+        <li><a href="#timeline" class="nav-item" id="nav-timeline">
+            <svg viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="10"></circle>
+              <polyline points="12 6 12 12 16 14"></polyline>
+            </svg>
+            <span>Timeline</span>
+          </a></li>
+        <li><a href="#evidence" class="nav-item" id="nav-evidence">
+            <svg viewBox="0 0 24 24">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+              <polyline points="14 2 14 8 20 8"></polyline>
+              <line x1="16" y1="13" x2="8" y2="13"></line>
+              <line x1="16" y1="17" x2="8" y2="17"></line>
+              <polyline points="10 9 9 9 8 9"></polyline>
+            </svg>
+            <span>Evidence</span>
+          </a></li>
+        <li><a href="#emails" class="nav-item" id="nav-emails">
+            <svg viewBox="0 0 24 24">
+              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+              <polyline points="22,6 12,13 2,6"></polyline>
+            </svg>
+            <span>Emails</span>
+          </a></li>
+        <li><a href="#downloads" class="nav-item" id="nav-downloads">
+            <svg viewBox="0 0 24 24">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="7 10 12 15 17 10"></polyline>
+              <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+            <span>Downloads</span>
+          </a></li>
+      </ul>
+    </nav>
 
-      <div class="card animate-enter delay-1">
-        <div class="card-header">
-          <h2>Status</h2>
-        </div>
-        <p class="text-muted text-small">Discovery is currently open. Focus is on internal communications regarding the
-          "Vibe Shift" event.</p>
-      </div>
-    </div>
+    <!-- CONTENT -->
+    <main class="main-content">
 
-    <!-- Main Content Grid -->
-    <div class="grid-dashboard">
+      <!-- PANEL: OVERVIEW -->
+      <section id="panel-overview" class="panel">
+        <h1>Case Overview</h1>
+        <p id="case-meta-subtitle"></p>
 
-      <!-- Left: Incident Summary -->
-      <div class="card animate-enter delay-2" style="height: fit-content;">
-        <div class="card-header">
-          <h2>Incident Summary</h2>
-        </div>
-        <p class="mb-4">
-          On or about December 2023, the Defendant allegedly introduced "bad vibes" into the shared workspace ecosystem.
-          This resulted in a palpable decrease in team morale and productivity, quantitatively measured as a 40% drop in
-          "stoke levels."
-        </p>
-        <p class="mb-4">
-          Plaintiff asserts these actions constitute a breach of the unspoken social contract regarding office playlist
-          dominance and snack equity.
-        </p>
-        <div class="badge">Fact Pattern A</div>
-        <div class="badge">Fact Pattern B</div>
-      </div>
-
-      <!-- Right: Evidence & Issues -->
-      <div style="display: flex; flex-direction: column; gap: var(--space-6);">
-
-        <div class="card animate-enter delay-3">
-          <div class="card-header">
-            <h2>Evidence Status</h2>
+        <div class="grid-2">
+          <!-- Snapshot -->
+          <div class="card">
+            <h2>Snapshot</h2>
+            <ul id="overview-snapshot" style="padding-left: 20px; color: var(--color-text-secondary);"></ul>
           </div>
-          <div class="row"
-            style="margin-top:0; align-items: center; justify-content: space-between; margin-bottom: 12px;">
-            <span class="text-small">Slack Logs</span>
-            <span class="badge"
-              style="margin:0; background: #ECFDF5; color: var(--color-success); border:none;">Produced</span>
-          </div>
-          <div class="row"
-            style="margin-top:0; align-items: center; justify-content: space-between; margin-bottom: 12px;">
-            <span class="text-small">Spotify Historics</span>
-            <span class="badge"
-              style="margin:0; background: #FEF3C7; color: var(--color-warning); border:none;">Pending</span>
-          </div>
-          <div class="row" style="margin-top:0; align-items: center; justify-content: space-between;">
-            <span class="text-small">Napkin Notes</span>
-            <span class="badge"
-              style="margin:0; background: #FEE2E2; color: var(--color-danger); border:none;">Missing</span>
+          <!-- Parties -->
+          <div class="card">
+            <h2>Parties & Agencies</h2>
+            <div id="overview-parties"></div>
           </div>
         </div>
 
-        <div class="card animate-enter delay-3">
-          <div class="card-header">
-            <h2>Legal Issues</h2>
+        <div class="grid-2">
+          <div class="card">
+            <h2>Issues Implicated</h2>
+            <div id="overview-issues" style="display: flex; gap: 8px; flex-wrap: wrap;"></div>
           </div>
-          <ul style="padding-left: 20px; font-size: 14px;">
-            <li>Implied Warranty of Chillness</li>
-            <li>Intentional Infliction of Boredom</li>
-            <li>Tortious Interference with Vibe</li>
-          </ul>
+          <div class="card">
+            <h2>Objectives</h2>
+            <div id="overview-seeking"></div>
+          </div>
         </div>
+      </section>
 
-      </div>
-    </div>
+      <!-- PANEL: TIMELINE -->
+      <section id="panel-timeline" class="panel">
+        <h1>Timeline</h1>
+        <div class="toolbar">
+          <input type="text" class="search-input" placeholder="Search events..." onkeyup="filterTimeline(this.value)">
+          <div class="chip" onclick="toggleTimelineFilter(this, 'missing')">Missing/Destroyed Only</div>
+        </div>
+        <div class="card">
+          <div class="timeline" id="timeline-container"></div>
+        </div>
+      </section>
 
+      <!-- PANEL: EVIDENCE -->
+      <section id="panel-evidence" class="panel">
+        <h1>Evidence Index</h1>
+        <div class="toolbar">
+          <div class="chip" onclick="toggleEvidenceFilter(this, 'missing')">Show Missing/Destroyed</div>
+        </div>
+        <div class="card" style="padding: 0; overflow: hidden;">
+          <table id="evidence-table">
+            <thead>
+              <tr>
+                <th onclick="sortEvidence('id')">ID</th>
+                <th onclick="sortEvidence('desc')">Description</th>
+                <th onclick="sortEvidence('date')">Date</th>
+                <th onclick="sortEvidence('status')">Status</th>
+                <th>Link</th>
+              </tr>
+            </thead>
+            <tbody id="evidence-tbody"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- PANEL: EMAILS -->
+      <section id="panel-emails" class="panel">
+        <h1>Correspondence</h1>
+        <div class="toolbar">
+          <input type="text" class="search-input" placeholder="Search subject, body, or sender..."
+            onkeyup="filterEmails(this.value)">
+        </div>
+        <div id="emails-container"></div>
+      </section>
+
+      <!-- PANEL: DOWNLOADS -->
+      <section id="panel-downloads" class="panel">
+        <h1>Downloads</h1>
+        <div class="grid-3" id="downloads-container"></div>
+      </section>
+
+    </main>
   </div>
+
+  <script>
+    /* --- DATA MODEL (EDIT HERE) --- */
+
+    const CASE_META = {
+      title: "Vibe Check Corp v. Bad Vibes LLC",
+      number: "2024-VC-001",
+      snapshot: [
+        "Complaint filed Jan 5, 2024 regarding 'Vibe Drift'.",
+        "Defendant allegedly introduced speed metal to communal playlist.",
+        "Key dispute: Definition of 'Chill'.",
+        "Discovery Deadline: Feb 14, 2024."
+      ],
+      parties: [
+        { role: "Plaintiff", name: "Vibe Check Corp.", counsel: "Firm A" },
+        { role: "Defendant", name: "Bad Vibes LLC", counsel: "Firm B" }
+      ],
+      issues: ["Breach of Chill", "Sonic Trespass", "Intentional Buzzkill"],
+      seeking: "Restoration of prior playlist controls and apology via Slack."
+    };
+
+    const TIMELINE = [
+      { date: "2023-12-12", displayDate: "Dec 12, 2023", title: "Initial Vibe Drift Detected", source: "Report", tags: ["report"], body: "Witnesses noted a sudden shift in breakroom atmosphere.", importance: "First documented incident." },
+      { date: "2023-12-14", displayDate: "Dec 14, 2023", title: "Email re: Slack Tone", source: "Email", tags: ["email"], body: "Plaintiff requested more emojis. Defendant responded with single thumbs-up.", importance: "Establishes passive-aggression." },
+      { date: "2023-12-20", displayDate: "Dec 20, 2023", title: "The 'Coffee Walk' Walkout", source: "CAD", tags: ["cad", "missing"], body: "40% of staff left building. Security footage of kitchen is missing.", importance: "Key event with missing evidence (EXH-009)." },
+      { date: "2024-01-05", displayDate: "Jan 05, 2024", title: "Complaint Filed", source: "Court", tags: ["court"], body: "Legal action initiated.", importance: "Formal start of litigation." },
+      { date: "2024-01-10", displayDate: "Jan 10, 2024", title: "HR Guidelines Produced", source: "Doc", tags: ["produced"], body: "Employee handbook produced showing 'Vibe' policy.", importance: "Defenses rely on Section 4.2." }
+    ];
+
+    const EVIDENCE = [
+      { id: "EXH-001", desc: "Spotify Playlist History (2023)", status: "produced", date: "2023-12-01", link: "#" },
+      { id: "EXH-004", desc: "Slack Logs: #random channel", status: "produced", date: "2023-12-14", link: "#" },
+      { id: "EXH-009", desc: "Security Camera Footage: Kitchen", status: "destroyed", date: "2023-12-20", link: null },
+      { id: "REQ-012", desc: "Napkin Notes from Lunch", status: "missing", date: "2023-11-20", link: null },
+      { id: "EXH-002", desc: "HR Policy: 'Vibe Guidelines'", status: "produced", date: "2023-01-10", link: "#" }
+    ];
+
+    const EMAILS = [
+      {
+        id: "EML001", from: "Manager (Plaintiff)", subject: "Re: The Tone of Slack Messages", date: "2023-12-14",
+        snippet: "I feel like we aren't maximizing our emoji usage in standups...",
+        body: "Team,\n\nI feel like we aren't maximizing our emoji usage in standups. It reads a bit cold. Let's try to add at least 2 sparkles per update.\n\nBest,\nMgmt"
+      },
+      {
+        id: "EML002", from: "Dev (Defendant)", subject: "RE: Re: The Tone of Slack Messages", date: "2023-12-14",
+        snippet: "Noted.",
+        body: "Noted. 👍"
+      }
+    ];
+
+    const DOWNLOADS = [
+      { cat: "Pleadings", title: "Complaint (Dkt 1)", url: "#" },
+      { cat: "Pleadings", title: "Answer (Dkt 5)", url: "#" },
+      { cat: "Production", title: "Batch 001 - Slack Logs", url: "#" },
+      { cat: "Production", title: "Batch 002 - HR Policies", url: "#" }
+    ];
+
+    /* --- LOGIC --- */
+
+    // Helpers
+    const esc = (str) => {
+      if (!str) return '';
+      return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+    };
+
+    // Router
+    function route() {
+      const hash = window.location.hash || '#overview';
+      // Highlight Nav
+      document.querySelectorAll('.nav-item').forEach(el => el.removeAttribute('aria-current'));
+      const activeNav = document.querySelector(`a[href="${hash}"]`);
+      if (activeNav) activeNav.setAttribute('aria-current', 'page');
+
+      // Switch Panels
+      document.querySelectorAll('.panel').forEach(el => el.classList.remove('active'));
+      const activePanel = document.querySelector(`#panel-${hash.substring(1)}`);
+      if (activePanel) {
+        // Small timeout to allow display:block to apply before opacity transition
+        activePanel.style.display = 'block';
+        setTimeout(() => activePanel.classList.add('active'), 10);
+      }
+
+      // Hide others completely after transition (simplified for now: just css handles visibility)
+      document.querySelectorAll('.panel').forEach(el => {
+        if (el !== activePanel) {
+          el.classList.remove('active');
+          setTimeout(() => { if (!el.classList.contains('active')) el.style.display = 'none'; }, 250);
+        }
+      });
+
+      if (hash === '#evidence') renderEvidence(); // Re-render to sort if needed
+    }
+
+    // Render Overview
+    function renderOverview() {
+      document.getElementById('case-meta-subtitle').textContent = CASE_META.number;
+      document.getElementById('overview-snapshot').innerHTML = CASE_META.snapshot.map(s => `<li>${esc(s)}</li>`).join('');
+
+      document.getElementById('overview-parties').innerHTML = CASE_META.parties.map(p => `
+        <div style="margin-bottom:12px">
+            <div style="font-weight:600">${esc(p.role)}</div>
+            <div>${esc(p.name)}</div>
+            <div class="text-small text-muted">Counsel: ${esc(p.counsel)}</div>
+        </div>
+    `).join('');
+
+      document.getElementById('overview-issues').innerHTML = CASE_META.issues.map(i => `<span class="chip">${esc(i)}</span>`).join('');
+      document.getElementById('overview-seeking').textContent = CASE_META.seeking;
+    }
+
+    // Render Timeline
+    // State
+    let timelineFilterText = '';
+    let timelineShowMissing = false;
+
+    function renderTimeline() {
+      const container = document.getElementById('timeline-container');
+      container.innerHTML = '';
+
+      const filtered = TIMELINE.filter(item => {
+        const matchesText = (item.title + item.body).toLowerCase().includes(timelineFilterText.toLowerCase());
+        const matchesMissing = timelineShowMissing ? (item.tags.includes('missing') || item.tags.includes('destroyed')) : true;
+        return matchesText && matchesMissing;
+      });
+
+      if (filtered.length === 0) {
+        container.innerHTML = '<p style="padding:20px; text-align:center;">No events found.</p>';
+        return;
+      }
+
+      filtered.forEach(item => {
+        const el = document.createElement('div');
+        el.className = 't-item';
+        // Auto-expand if searching
+        const expandedClass = timelineFilterText.length > 0 ? 'expanded' : '';
+
+        el.innerHTML = `
+            <div class="t-marker"></div>
+            <div class="card" style="margin:0; padding:0; overflow:hidden;">
+                <div class="t-header" style="padding:16px;" onclick="this.parentElement.parentElement.classList.toggle('expanded')">
+                    <div>
+                        <div class="text-small" style="color:var(--color-text-secondary); margin-bottom:4px;">${esc(item.displayDate)}</div>
+                        <div style="font-weight:500">${esc(item.title)}</div>
+                    </div>
+                    <span class="status" style="background:var(--color-surface-hover); color:var(--color-text-secondary); border:1px solid var(--color-border-subtle)">${esc(item.source)}</span>
+                </div>
+                <div class="t-body" style="padding:0 16px 16px;">
+                    <div style="margin-bottom:8px"><strong>Significance:</strong> ${esc(item.importance)}</div>
+                    <p>${esc(item.body)}</p>
+                    <div class="text-small" style="color:var(--color-text-tertiary)">Tags: ${item.tags.join(', ')}</div>
+                </div>
+            </div>
+        `;
+        container.appendChild(el);
+      });
+    }
+
+    function filterTimeline(val) {
+      timelineFilterText = val;
+      renderTimeline();
+    }
+    function toggleTimelineFilter(el, type) {
+      if (type === 'missing') timelineShowMissing = !timelineShowMissing;
+      el.classList.toggle('active');
+      renderTimeline();
+    }
+
+    // Render Evidence
+    let evidenceSort = { key: 'id', asc: true };
+    let evidenceShowMissing = false;
+
+    function renderEvidence() {
+      const tbody = document.getElementById('evidence-tbody');
+      tbody.innerHTML = '';
+
+      // Filter
+      let items = EVIDENCE.filter(item => {
+        return evidenceShowMissing ? (['missing', 'destroyed'].includes(item.status)) : true;
+      });
+
+      // Sort
+      items.sort((a, b) => {
+        let valA = a[evidenceSort.key].toLowerCase();
+        let valB = b[evidenceSort.key].toLowerCase();
+        if (valA < valB) return evidenceSort.asc ? -1 : 1;
+        if (valA > valB) return evidenceSort.asc ? 1 : -1;
+        return 0;
+      });
+
+      items.forEach(item => {
+        const tr = document.createElement('tr');
+        const stClass = `st-${item.status}`;
+        const linkHtml = item.link ? `<a href="${item.link}" style="color:var(--color-link)">View</a>` : `<span class="text-small text-muted">N/A</span>`;
+
+        tr.innerHTML = `
+            <td class="text-small"><code>${esc(item.id)}</code></td>
+            <td style="font-weight:500">${esc(item.desc)}</td>
+            <td class="text-small">${esc(item.date)}</td>
+            <td><span class="status ${stClass}">${esc(item.status)}</span></td>
+            <td>${linkHtml}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function sortEvidence(key) {
+      if (evidenceSort.key === key) evidenceSort.asc = !evidenceSort.asc;
+      else { evidenceSort.key = key; evidenceSort.asc = true; }
+      renderEvidence();
+    }
+    function toggleEvidenceFilter(el, type) {
+      evidenceShowMissing = !evidenceShowMissing;
+      el.classList.toggle('active');
+      renderEvidence();
+    }
+
+    // Render Emails
+    function renderEmails(filterVal = '') {
+      const container = document.getElementById('emails-container');
+      container.innerHTML = '';
+
+      const filtered = EMAILS.filter(e =>
+        (e.subject + e.body + e.from).toLowerCase().includes(filterVal.toLowerCase())
+      );
+
+      filtered.forEach(e => {
+        const div = document.createElement('div');
+        div.className = 'thread';
+        div.innerHTML = `
+            <div class="thread-header" onclick="this.parentElement.classList.toggle('expanded')">
+                <div>
+                   <div style="font-weight:600">${esc(e.subject)}</div>
+                   <div class="text-small" style="color:var(--color-text-secondary)">From: ${esc(e.from)} &nbsp;•&nbsp; ${esc(e.date)}</div>
+                   <div style="color:var(--color-text-secondary); margin-top:4px;">${esc(e.snippet)}</div>
+                </div>
+            </div>
+            <div class="thread-body" style="white-space: pre-wrap;">${esc(e.body)}</div>
+        `;
+        container.appendChild(div);
+      });
+    }
+    function filterEmails(val) { renderEmails(val); }
+
+    // Render Downloads
+    function renderDownloads() {
+      const container = document.getElementById('downloads-container');
+      const cats = {};
+      DOWNLOADS.forEach(d => {
+        if (!cats[d.cat]) cats[d.cat] = [];
+        cats[d.cat].push(d);
+      });
+
+      container.innerHTML = Object.keys(cats).map(cat => `
+        <div class="card">
+            <h2>${esc(cat)}</h2>
+            <ul style="padding-left:20px; line-height:2;">
+                ${cats[cat].map(file => `<li><a href="${file.url}" style="color:var(--color-link); text-decoration:none;">${esc(file.title)}</a></li>`).join('')}
+            </ul>
+        </div>
+    `).join('');
+    }
+
+    /* --- INIT --- */
+    window.addEventListener('hashchange', route);
+    window.addEventListener('load', () => {
+      renderOverview();
+      renderTimeline();
+      renderEvidence();
+      renderEmails();
+      renderDownloads();
+      route();
+    });
+  </script>
 </body>
 
 </html>
