@@ -3,23 +3,54 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Case Portal – The Vibe Check Project</title>
+  <title>Private Case Portal</title>
+  <meta name="robots" content="noindex,nofollow" />
   <style>
-    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial,sans-serif;margin:40px;line-height:1.5}
-    .card{max-width:860px;padding:24px;border:1px solid #ddd;border-radius:12px}
-    .muted{color:#666}
-    code{background:#f4f4f4;padding:2px 6px;border-radius:6px}
+    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial,sans-serif;margin:40px;line-height:1.6}
+    .wrap{max-width:980px}
+    .pill{display:inline-block;padding:6px 10px;border-radius:999px;background:#f3f4f6;font-size:12px;margin-bottom:10px}
+    .grid{display:grid;grid-template-columns:1fr;gap:16px;margin-top:18px}
+    .card{border:1px solid #e5e7eb;border-radius:16px;padding:18px}
+    .muted{color:#6b7280}
+    a{color:inherit}
+    .btn{display:inline-block;border:1px solid #e5e7eb;padding:10px 14px;border-radius:12px;text-decoration:none}
+    .btn:hover{background:#f9fafb}
+    .row{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+    code{background:#f3f4f6;padding:2px 6px;border-radius:8px}
+    ul{margin:8px 0 0 18px}
   </style>
 </head>
 <body>
-  <div class="card">
+  <div class="wrap">
+    <div class="pill">Restricted • Cloudflare Access</div>
     <h1>Private Case Portal</h1>
-    <p class="muted">This site is intentionally restricted. If you were given access, use the login link provided.</p>
-    <p><strong>Status:</strong> Initial setup</p>
-    <p><strong>Last updated:</strong> <span id="d"></span></p>
-    <hr/>
-    <p>Next: Replace this placeholder with your case dashboard.</p>
-    <p class="muted">Repo: <code>thevibecheckproject-case</code></p>
+    <p class="muted">Invite-only case review workspace. If you reached this page, you passed Access.</p>
+
+    <div class="row">
+      <a class="btn" href="/case/">Open /case/ route</a>
+      <a class="btn" href="/cdn-cgi/access/logout">Log out</a>
+    </div>
+
+    <div class="grid">
+      <div class="card">
+        <h2>Start here</h2>
+        <ul>
+          <li><strong>Timeline</strong> (coming next)</li>
+          <li><strong>Evidence index</strong> (coming next)</li>
+          <li><strong>Correspondence</strong> (coming next)</li>
+          <li><strong>Downloads</strong> (PDFs, exhibits)</li>
+        </ul>
+        <p class="muted">Last updated: <span id="d"></span></p>
+      </div>
+
+      <div class="card">
+        <h2>Reviewer instructions</h2>
+        <p class="muted">
+          This portal is protected by Cloudflare Access. Reviewers must authenticate to view anything.
+          If you ever see a 404 after login, use <code>/</code> or <code>/case/</code>.
+        </p>
+      </div>
+    </div>
   </div>
 
   <script>
