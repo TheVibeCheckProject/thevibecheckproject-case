@@ -214,6 +214,24 @@
       color: var(--color-text-secondary);
     }
 
+    .chip-danger {
+      background: #fee2e2;
+      color: #991b1b;
+      border-color: #fecaca;
+    }
+
+    .chip-warning {
+      background: #fef3c7;
+      color: #92400e;
+      border-color: #fde68a;
+    }
+
+    .chip-success {
+      background: #dcfce7;
+      color: #166534;
+      border-color: #bbf7d0;
+    }
+
     .search-input,
     .text-input,
     textarea {
@@ -409,6 +427,26 @@
       text-transform: uppercase;
       font-weight: 600;
     }
+
+    .analysis-card {
+      border-left: 4px solid transparent;
+    }
+
+    .analysis-card.contra {
+      border-left-color: var(--color-danger);
+    }
+
+    .analysis-card.anom {
+      border-left-color: var(--color-warning);
+    }
+
+    .analysis-card.join {
+      border-left-color: var(--color-link);
+    }
+
+    .analysis-card.follow {
+      border-left-color: var(--color-success);
+    }
   </style>
 </head>
 
@@ -422,6 +460,7 @@
         <li><a href="#entities" class="nav-item"><span>Entities</span></a></li>
         <li><a href="#timeline" class="nav-item"><span>Timeline</span></a></li>
         <li><a href="#evidence" class="nav-item"><span>Evidence</span></a></li>
+        <li><a href="#analysis" class="nav-item"><span>Analysis Report</span></a></li>
         <li><a href="#ingest" class="nav-item"><span>Ingest</span></a></li>
         <li><a href="#agent" class="nav-item"><span>Agent</span></a></li>
       </ul>
@@ -519,6 +558,19 @@
         </div>
       </section>
 
+      <!-- ANALYSIS -->
+      <section id="panel-analysis" class="panel">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+          <h1>Analysis Report</h1>
+          <button class="btn-primary" onclick="agentClient.runBuild('analysis_report')">Run Analysis Report</button>
+        </div>
+
+        <div id="analysis-container">
+          <p class="text-muted" style="text-align:center; padding:40px;">No analysis report generated yet. Click "Run
+            Analysis Report" to begin.</p>
+        </div>
+      </section>
+
       <!-- INGEST -->
       <section id="panel-ingest" class="panel">
         <h1>Document Ingest</h1>
@@ -609,7 +661,8 @@
       entities: {},
       timeline_events: [],
       evidence_items: [],
-      audit_log: []
+      audit_log: [],
+      analysis_report: null
     };
 
     // Load state
@@ -639,7 +692,7 @@
         const hash = window.location.hash || '#overview';
         document.querySelectorAll('.panel').forEach(el => el.classList.remove('active'));
         document.querySelectorAll('.nav-item').forEach(el => el.removeAttribute('aria-current'));
-        const target = document.querySelector(hash === '#ingest' ? '#panel-ingest' : hash === '#agent' ? '#panel-agent' : hash === '#entities' ? '#panel-entities' : `#panel-${hash.substring(1)}`);
+        const target = document.querySelector(hash === '#ingest' ? '#panel-ingest' : hash === '#agent' ? '#panel-agent' : hash === '#entities' ? '#panel-entities' : hash === '#analysis' ? '#panel-analysis' : `#panel-${hash.substring(1)}`);
         const nav = document.querySelector(`.nav-list a[href="${hash}"]`);
 
         if (target) { target.style.display = 'block'; setTimeout(() => target.classList.add('active'), 10); }
@@ -683,6 +736,9 @@
         // Evidence
         evidenceUI.render();
 
+        // Analysis
+        app.renderAnalysis(case_state.analysis_report);
+
         // Ingest
         ingest.renderDocs();
 
@@ -707,6 +763,81 @@
                            ${(e.citations || []).map(c => `[${esc(c.doc_id)}:p${c.page}]`).join(' ')}
                         </div>
                     </div>`).join('');
+      },
+      renderAnalysis: (report) => {
+        const container = document.getElementById('analysis-container');
+        if (!report) {
+          container.innerHTML = '<p class="text-muted" style="text-align:center; padding:40px;">No analysis report generated yet. Click "Run Analysis Report" to begin.</p>';
+          return;
+        }
+
+        const renderCitations = (citations) => (citations || []).map(c => {
+          const encodedQuote = encodeURIComponent(c.quote || '');
+          return `<span style="font-family:monospace; margin-right:4px;">[${esc(c.doc_id)}:p${c.page}] <button class="btn-xs" onclick="evidenceUI.viewQuote('${encodedQuote}')">View Quote</button></span>`;
+        }).join(' ');
+
+        let html = '';
+
+        // 1. Contradictions
+        const contras = report.contradictions || [];
+        html += `<h2>Contradictions (${contras.length})</h2><div style="margin-bottom:32px;">`;
+        if (contras.length === 0) html += `<p class="text-muted text-small">None found.</p>`;
+        else html += contras.map(item => `
+                    <div class="card analysis-card contra" style="padding:16px;">
+                        <h4 style="color:var(--color-danger)">${esc(item.title)}</h4>
+                        <p>${esc(item.summary)}</p>
+                        <p class="text-small"><strong>Why it matters:</strong> ${esc(item.why_it_matters)}</p>
+                        <div class="text-small text-muted" style="margin-top:8px;">${renderCitations(item.citations)}</div>
+                    </div>
+                `).join('');
+        html += `</div>`;
+
+        // 2. Anomalies
+        const anomalies = report.anomalies || [];
+        html += `<h2>Anomalies (${anomalies.length})</h2><div style="margin-bottom:32px;">`;
+        if (anomalies.length === 0) html += `<p class="text-muted text-small">None found.</p>`;
+        else html += anomalies.map(item => {
+          const sevClass = item.severity === 'high' ? 'chip-danger' : item.severity === 'medium' ? 'chip-warning' : 'chip-success';
+          return `
+                    <div class="card analysis-card anom" style="padding:16px;">
+                        <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+                            <h4 style="color:var(--color-warning)">${esc(item.title)}</h4>
+                            <div><span class="chip ${sevClass}">${esc(item.severity)}</span></div>
+                        </div>
+                        <p>${esc(item.summary)}</p>
+                        <div style="margin-top:4px;"><span class="chip">${esc(item.category)}</span></div>
+                        <div class="text-small text-muted" style="margin-top:8px;">${renderCitations(item.citations)}</div>
+                    </div>
+                `;
+        }).join('');
+        html += `</div>`;
+
+        // 3. Joins
+        const joins = report.joins || [];
+        html += `<h2>Cross-Document Joins (${joins.length})</h2><div style="margin-bottom:32px;">`;
+        if (joins.length === 0) html += `<p class="text-muted text-small">None found.</p>`;
+        else html += joins.map(item => `
+                    <div class="card analysis-card join" style="padding:16px;">
+                        <h4 style="color:var(--color-link)">${esc(item.value)} <span class="text-muted">(${esc(item.entity)})</span></h4>
+                        <div class="text-small text-muted" style="margin-top:8px;">Found in: ${renderCitations(item.found_in)}</div>
+                    </div>
+                `).join('');
+        html += `</div>`;
+
+        // 4. Follow-ups
+        const follows = report.followups || [];
+        html += `<h2>Follow-up Questions (${follows.length})</h2><div style="margin-bottom:32px;">`;
+        if (follows.length === 0) html += `<p class="text-muted text-small">None found.</p>`;
+        else html += follows.map(item => `
+                    <div class="card analysis-card follow" style="padding:16px;">
+                        <h4 style="color:var(--color-success)">Q: ${esc(item.question)}</h4>
+                        <p class="text-small">${esc(item.reason)}</p>
+                        <div class="text-small text-muted" style="margin-top:8px;">${renderCitations(item.citations)}</div>
+                    </div>
+                `).join('');
+        html += `</div>`;
+
+        container.innerHTML = html;
       }
     };
 
@@ -851,15 +982,19 @@
             // Update State directly
             if (action === 'extract_entities' && data.proposals.entities) {
               case_state.entities = data.proposals.entities;
-              showToast('Entities Updated');
+              if (!opts.silentToast) showToast('Entities Updated');
             }
             if (action === 'propose_timeline_events' && data.proposals.timeline_events) {
               case_state.timeline_events = data.proposals.timeline_events;
-              showToast('Timeline Updated');
+              if (!opts.silentToast) showToast('Timeline Updated');
             }
             if (action === 'propose_evidence_items' && data.proposals.evidence_items) {
               case_state.evidence_items = data.proposals.evidence_items;
-              showToast('Evidence Index Updated');
+              if (!opts.silentToast) showToast('Evidence Index Updated');
+            }
+            if (action === 'analysis_report' && data.proposals.analysis_report) {
+              case_state.analysis_report = data.proposals.analysis_report;
+              showToast('Analysis Report Ready');
             }
 
             if (data.audit_log_entry) {
