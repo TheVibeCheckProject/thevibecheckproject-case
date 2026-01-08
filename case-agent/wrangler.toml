@@ -1,0 +1,14 @@
+name = "case-agent"
+main = "src/index.ts"
+compatibility_date = "2023-12-01"
+
+[vars]
+# OPENAI_API_KEY will be set via `wrangler secret put OPENAI_API_KEY`
+
+[vars]
+# no plain-text secrets here
+
+# Secrets expected:
+# - CASE_PORTAL_TOKEN
+# - OPENAI_API_KEY
+
