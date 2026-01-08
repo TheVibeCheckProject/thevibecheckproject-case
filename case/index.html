@@ -112,14 +112,6 @@
       box-shadow: inset 3px 0 0 var(--color-action);
     }
 
-    .nav-item svg {
-      width: 18px;
-      height: 18px;
-      stroke: currentColor;
-      stroke-width: 2;
-      fill: none;
-    }
-
     .btn-clean {
       width: 100%;
       text-align: left;
@@ -147,7 +139,7 @@
     }
 
     .panel {
-      max-width: 1000px;
+      max-width: 1200px;
       margin: 0 auto;
       display: none;
       opacity: 0;
@@ -213,22 +205,25 @@
     .chip {
       background: var(--color-surface);
       border: 1px solid var(--color-border-subtle);
-      padding: 4px 10px;
+      padding: 2px 8px;
       border-radius: 99px;
       font-size: 11px;
       font-weight: 500;
       display: inline-block;
-      margin-right: 6px;
+      margin-right: 4px;
+      color: var(--color-text-secondary);
     }
 
     .search-input,
-    .text-input {
+    .text-input,
+    textarea {
       padding: 8px 12px;
       border: 1px solid var(--color-border-subtle);
       border-radius: var(--radius-md);
       font-size: 14px;
       width: 100%;
       margin-bottom: 16px;
+      font-family: inherit;
     }
 
     table {
@@ -242,6 +237,18 @@
       text-align: left;
       padding: 12px;
       border-bottom: 1px solid var(--color-border-subtle);
+      vertical-align: top;
+    }
+
+    th {
+      font-weight: 600;
+      color: var(--color-text-secondary);
+      cursor: pointer;
+      user-select: none;
+    }
+
+    th:hover {
+      color: var(--color-text-primary);
     }
 
     tr:hover td {
@@ -257,42 +264,44 @@
       text-transform: uppercase;
     }
 
-    .st-produced {
+    .st-draft {
+      background: #E0F2FE;
+      color: #0284C7;
+    }
+
+    .st-saved {
       background: #ECFDF5;
       color: #059669;
     }
 
-    .st-missing {
-      background: #FEF2F2;
-      color: #DC2626;
+    .btn-primary {
+      padding: 8px 16px;
+      background: var(--color-action);
+      color: white;
+      border: none;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      font-weight: 500;
+      font-size: 14px;
     }
 
-    .st-destroyed {
-      background: #F3F4F6;
-      color: #4B5563;
+    .btn-primary:hover {
+      background: var(--color-action-hover);
     }
 
-    .drop-zone {
-      border: 2px dashed var(--color-border-subtle);
-      padding: 40px;
-      text-align: center;
-      border-radius: var(--radius-lg);
-      margin-bottom: 24px;
-      transition: border-color 0.2s;
+    .btn-danger {
+      padding: 8px 16px;
+      background: var(--color-danger);
+      color: white;
+      border: none;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      font-weight: 500;
+      font-size: 14px;
     }
 
-    .drop-zone.active {
-      border-color: var(--color-action);
-      background: var(--color-surface-hover);
-    }
-
-    .select-input {
-      padding: 4px 8px;
-      border-radius: 4px;
-      border: 1px solid var(--color-border-subtle);
-      font-size: 12px;
-      background: white;
-      color: var(--color-text-primary);
+    .btn-danger:hover {
+      opacity: 0.9;
     }
 
     .btn-xs {
@@ -303,24 +312,6 @@
       font-size: 11px;
       cursor: pointer;
       font-weight: 600;
-    }
-
-    .btn-accept {
-      border-color: #10B981;
-      color: #059669;
-    }
-
-    .btn-accept:hover {
-      background: #ECFDF5;
-    }
-
-    .btn-reject {
-      border-color: #EF4444;
-      color: #DC2626;
-    }
-
-    .btn-reject:hover {
-      background: #FEF2F2;
     }
 
     /* Agent Chat */
@@ -359,24 +350,64 @@
       margin-top: 8px;
     }
 
-    /* Integration classes */
-    .pill {
-      display: inline-block;
-      padding: 4px 10px;
-      border-radius: 999px;
-      border: 1px solid var(--color-border-subtle);
-      font-size: 11px;
+    /* Toast */
+    #toast {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: #1E293B;
+      color: white;
+      padding: 12px 24px;
+      border-radius: var(--radius-md);
+      font-size: 14px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s;
+      z-index: 9999;
     }
 
-    .codeblock {
+    #toast.show {
+      opacity: 1;
+    }
+
+    /* Modal */
+    #modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.5);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+    }
+
+    #modal-content {
+      background: white;
+      padding: 24px;
+      border-radius: var(--radius-lg);
+      width: 500px;
+      max-width: 90%;
+    }
+
+    .stat-box {
+      background: var(--color-surface);
       border: 1px solid var(--color-border-subtle);
-      border-radius: 12px;
-      padding: 12px;
-      background: #1E293B;
-      color: #E2E8F0;
-      font-family: var(--font-mono);
+      padding: 16px;
+      border-radius: var(--radius-md);
+      text-align: center;
+    }
+
+    .stat-num {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--color-action);
+    }
+
+    .stat-label {
       font-size: 12px;
-      white-space: pre-wrap;
+      color: var(--color-text-secondary);
+      text-transform: uppercase;
+      font-weight: 600;
     }
   </style>
 </head>
@@ -388,17 +419,12 @@
       <div class="brand">Vibe Check Portal</div>
       <ul class="nav-list">
         <li><a href="#overview" class="nav-item"><span>Overview</span></a></li>
+        <li><a href="#entities" class="nav-item"><span>Entities</span></a></li>
         <li><a href="#timeline" class="nav-item"><span>Timeline</span></a></li>
         <li><a href="#evidence" class="nav-item"><span>Evidence</span></a></li>
-        <li><a href="#emails" class="nav-item"><span>Emails</span></a></li>
-        <li><a href="#downloads" class="nav-item"><span>Downloads</span></a></li>
         <li><a href="#ingest" class="nav-item"><span>Ingest</span></a></li>
-        <li><a href="#proposals" class="nav-item"><span>Proposals</span></a></li>
         <li><a href="#agent" class="nav-item"><span>Agent</span></a></li>
       </ul>
-      <div style="margin-top: auto;">
-        <button onclick="exportData()" class="btn-clean">↓ Export case_data.json</button>
-      </div>
     </nav>
 
     <main class="main-content">
@@ -406,55 +432,91 @@
       <!-- OVERVIEW -->
       <section id="panel-overview" class="panel">
         <h1>Case Overview</h1>
-        <p id="meta-number" class="text-muted"></p>
-        <div class="grid-2">
-          <div class="card">
-            <h2>Snapshot</h2>
-            <ul id="overview-snapshot" style="padding-left: 20px; color: var(--color-text-secondary);"></ul>
+        <p class="text-muted">Vibe Check Corp v. Bad Vibes LLC</p>
+
+        <div class="grid-3" style="margin-bottom: 24px;">
+          <div class="stat-box">
+            <div class="stat-num" id="ov-doc-count">0</div>
+            <div class="stat-label">Documents</div>
           </div>
-          <div class="card">
-            <h2>Parties</h2>
-            <div id="overview-parties"></div>
+          <div class="stat-box">
+            <div class="stat-num" id="ov-evt-count">0</div>
+            <div class="stat-label">Timeline Events</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-num" id="ov-ev-count">0</div>
+            <div class="stat-label">Evidence Items</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>Audit Log</h2>
+          <div id="audit-log-list" style="max-height: 200px; overflow-y: auto;"></div>
+        </div>
+      </section>
+
+      <!-- ENTITIES -->
+      <section id="panel-entities" class="panel">
+        <h1>Entities</h1>
+        <div class="grid-3">
+          <div>
+            <h4>People (<span id="cnt-people">0</span>)</h4>
+            <ul id="list-people" style="padding-left:20px;"></ul>
+          </div>
+          <div>
+            <h4>Organizations (<span id="cnt-orgs">0</span>)</h4>
+            <ul id="list-orgs" style="padding-left:20px;"></ul>
+          </div>
+          <div>
+            <h4>Locations (<span id="cnt-locations">0</span>)</h4>
+            <ul id="list-locations" style="padding-left:20px;"></ul>
+          </div>
+        </div>
+        <div class="grid-2" style="margin-top:24px;">
+          <div>
+            <h4>Identifiers (<span id="cnt-ids">0</span>)</h4>
+            <ul id="list-ids" style="padding-left:20px;"></ul>
+          </div>
+          <div>
+            <h4>Dates (<span id="cnt-dates">0</span>)</h4>
+            <ul id="list-dates" style="padding-left:20px;"></ul>
           </div>
         </div>
       </section>
 
       <!-- TIMELINE -->
       <section id="panel-timeline" class="panel">
-        <h1>Timeline</h1>
-        <input type="text" class="search-input" placeholder="Search events..." onkeyup="app.filterTimeline(this.value)">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+          <h1>Timeline</h1>
+          <button class="btn-primary" onclick="agentClient.runBuild('propose_timeline_events')">Build Timeline</button>
+        </div>
         <div id="timeline-container"></div>
       </section>
 
       <!-- EVIDENCE -->
       <section id="panel-evidence" class="panel">
-        <h1>Evidence Index</h1>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+          <h1>Evidence Index</h1>
+          <button class="btn-primary" onclick="agentClient.runBuild('propose_evidence_items')">Build Evidence
+            Index</button>
+        </div>
+
         <div class="card" style="padding: 0; overflow: hidden;">
           <table id="evidence-table">
             <thead>
               <tr>
-                <th>ID</th>
-                <th>Description</th>
-                <th>Date</th>
-                <th>Status</th>
+                <th onclick="evidenceUI.sort('date')">Date ↕</th>
+                <th onclick="evidenceUI.sort('type')">Type ↕</th>
+                <th onclick="evidenceUI.sort('title')">Title ↕</th>
+                <th>People</th>
+                <th>Tags</th>
+                <th>Source</th>
+                <th>Actions</th>
               </tr>
             </thead>
             <tbody id="evidence-tbody"></tbody>
           </table>
         </div>
-      </section>
-
-      <!-- EMAILS -->
-      <section id="panel-emails" class="panel">
-        <h1>Correspondence</h1>
-        <input type="text" class="search-input" placeholder="Search..." onkeyup="app.filterEmails(this.value)">
-        <div id="emails-container"></div>
-      </section>
-
-      <!-- DOWNLOADS -->
-      <section id="panel-downloads" class="panel">
-        <h1>Downloads</h1>
-        <div class="grid-3" id="downloads-container"></div>
       </section>
 
       <!-- INGEST -->
@@ -468,26 +530,6 @@
             Files</button>
         </div>
         <div id="doc-list"></div>
-      </section>
-
-      <!-- PROPOSALS -->
-      <section id="panel-proposals" class="panel">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
-          <h1>Review Proposals</h1>
-          <button onclick="proposals.rebuild()"
-            style="padding: 6px 12px; border: 1px solid var(--color-border-subtle); background: white; font-weight:600; cursor: pointer;">↻
-            Rebuild from Docs</button>
-        </div>
-        <div class="grid-2">
-          <div>
-            <h4>Proposed Evidence (<span id="prop-evidence-count">0</span>)</h4>
-            <div id="prop-evidence-list"></div>
-          </div>
-          <div>
-            <h4>Proposed Timeline (<span id="prop-timeline-count">0</span>)</h4>
-            <div id="prop-timeline-list"></div>
-          </div>
-        </div>
       </section>
 
       <!-- AGENT -->
@@ -504,68 +546,87 @@
           </div>
         </div>
 
-        <div class="grid-2">
-          <!-- Controls / Chat -->
-          <div class="card">
-            <h4>Agent Controls</h4>
-            <div style="display:flex; gap:8px; margin-bottom:16px;">
-              <button onclick="agentClient.runStep()"
-                style="padding: 10px 16px; background: var(--color-action); color:white; border:none; border-radius: var(--radius-md); cursor:pointer; font-weight:500;">Run
-                Agent Step</button>
-            </div>
-
-            <h4>Chat</h4>
-            <div id="agent-chat" class="chat-container"></div>
-            <div style="display:flex; gap:8px;">
-              <input type="text" id="chat-input" class="text-input" placeholder="Type a message..."
-                style="margin-bottom:0;" onkeypress="if(event.key==='Enter') agentClient.sendChat()">
-              <button onclick="agentClient.sendChat()"
-                style="padding: 0 16px; border: 1px solid var(--color-border-subtle); background: white; border-radius:4px; cursor:pointer;">Send</button>
-            </div>
+        <!-- Dev Tool: Test Doc Paster -->
+        <div class="card" style="background: #F1F5F9; border-color: #CBD5E1;">
+          <h4>Dev: Paste Test Document</h4>
+          <div class="grid-3" style="gap:12px; margin-bottom:12px;">
+            <input type="text" id="test-doc-id" class="text-input" placeholder="Doc ID (e.g. doc1)" style="margin:0;">
+            <input type="text" id="test-filename" class="text-input" placeholder="Filename (e.g. report.txt)"
+              style="margin:0;">
+            <input type="number" id="test-page" class="text-input" placeholder="Page #" value="1" style="margin:0;">
           </div>
+          <textarea id="test-text" class="text-input" placeholder="Paste document content here..."
+            style="height:100px; resize:vertical;"></textarea>
+          <button class="btn-primary" style="background:#475569;" onclick="agentSetup.addTestDoc()">+ Add to Case
+            Docs</button>
+        </div>
 
-          <!-- Status / Output -->
-          <div class="card">
-            <h4>Agent Status</h4>
-            <div id="agent-status-panel" class="text-small text-muted" style="margin-bottom:16px;">
-              No run data.
-            </div>
-            <h4>Last Response</h4>
-            <div id="agent-json-viewer" class="code-block" style="height: 300px; overflow-y:auto;">{}</div>
+        <!-- Runner Controls -->
+        <div class="card">
+          <h4>Agent Actions</h4>
+          <div style="display:flex; gap:12px; flex-wrap:wrap;">
+            <button class="btn-primary" style="background:#0F766E" onclick="agentClient.runFullBuild()">Run Full
+              Build</button>
+            <button class="btn-primary" onclick="agentClient.runBuild('extract_entities')">Extract Entities</button>
+            <button class="btn-primary" onclick="agentClient.runBuild('propose_timeline_events')">Build
+              Timeline</button>
+            <button class="btn-primary" onclick="agentClient.runBuild('propose_evidence_items')">Build Evidence
+              Index</button>
+            <div style="flex:1"></div>
+            <button class="btn-danger" onclick="app.clearState()">Clear Case State</button>
           </div>
         </div>
+
+        <div class="card">
+          <h4>Last Response</h4>
+          <div id="agent-json-viewer" class="code-block" style="height: 300px; overflow-y:auto;">{}</div>
+        </div>
+
       </section>
 
     </main>
   </div>
 
+  <div id="toast">Saved</div>
+
+  <!-- QUOTE MODAL -->
+  <div id="modal-overlay" onclick="if(event.target===this) this.style.display='none'">
+    <div id="modal-content">
+      <h3>Verification Quote</h3>
+      <blockquote id="modal-quote"
+        style="border-left:4px solid var(--color-action); margin:0; padding-left:16px; font-style:italic; color: #475569;">
+      </blockquote>
+      <div style="text-align:right; margin-top:24px;">
+        <button onclick="document.getElementById('modal-overlay').style.display='none'" class="btn-xs">Close</button>
+      </div>
+    </div>
+  </div>
+
   <script>
     // --- DATA MODEL ---
     const INITIAL_STATE = {
-      case_meta: {
-        title: "Vibe Check Corp v. Bad Vibes LLC", number: "2024-VC-001",
-        snapshot: ["Complaint filed Jan 5, 2024 regarding 'Vibe Drift'.", "Key dispute: Definition of 'Chill'."],
-        parties: [{ role: "Plaintiff", name: "Vibe Check Corp." }, { role: "Defendant", name: "Bad Vibes LLC" }]
-      },
       documents: [],
-      evidence_items: [
-        { id: "EXH-001", desc: "Spotify Playlist History (2023)", status: "produced", date: "2023-12-01" },
-        { id: "EXH-009", desc: "Security Camera Footage: Kitchen", status: "destroyed", date: "2023-12-20" }
-      ],
-      timeline_events: [
-        { date: "2023-12-12", title: "Initial Vibe Drift Detected", source: "Report", body: "Witnesses noted atmosphere shift.", tags: ["report"] }
-      ],
-      emails: [{ id: "EML001", from: "Manager", subject: "Re: Tone", date: "2023-12-14", snippet: "More emojis needed.", body: "Team, please add sparkles." }],
-      downloads: [{ cat: "Pleadings", title: "Complaint (Dkt 1)", url: "#" }],
-      proposals: { evidence: [], timeline: [] },
-      // Agent State
-      agent_status: { plan: [], tasks: [], last_run_ts: null }
+      entities: {},
+      timeline_events: [],
+      evidence_items: [],
+      audit_log: []
     };
-    let case_state = JSON.parse(JSON.stringify(INITIAL_STATE));
+
+    // Load state
+    let savedState = localStorage.getItem('CASE_STATE');
+    let case_state = savedState ? JSON.parse(savedState) : JSON.parse(JSON.stringify(INITIAL_STATE));
+
+    const saveState = () => {
+      localStorage.setItem('CASE_STATE', JSON.stringify(case_state));
+    };
 
     // --- HEURISTICS & APP LOGIC ---
-    // (Simplified for this file - assuming Heuristics and App logic from previous implementation)
     const esc = (s) => s ? s.toString().replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;") : '';
+    const showToast = (msg) => {
+      const t = document.getElementById('toast');
+      t.innerText = msg; t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 2000);
+    };
 
     const app = {
       init: () => {
@@ -578,7 +639,7 @@
         const hash = window.location.hash || '#overview';
         document.querySelectorAll('.panel').forEach(el => el.classList.remove('active'));
         document.querySelectorAll('.nav-item').forEach(el => el.removeAttribute('aria-current'));
-        const target = document.querySelector(hash === '#ingest' ? '#panel-ingest' : hash === '#proposals' ? '#panel-proposals' : hash === '#agent' ? '#panel-agent' : `#panel-${hash.substring(1)}`);
+        const target = document.querySelector(hash === '#ingest' ? '#panel-ingest' : hash === '#agent' ? '#panel-agent' : hash === '#entities' ? '#panel-entities' : `#panel-${hash.substring(1)}`);
         const nav = document.querySelector(`.nav-list a[href="${hash}"]`);
 
         if (target) { target.style.display = 'block'; setTimeout(() => target.classList.add('active'), 10); }
@@ -587,25 +648,129 @@
           if (el !== target) { el.classList.remove('active'); setTimeout(() => { if (!el.classList.contains('active')) el.style.display = 'none'; }, 250); }
         });
       },
+      clearState: () => {
+        if (confirm("Are you sure you want to clear all case data? This cannot be undone.")) {
+          localStorage.removeItem('CASE_STATE');
+          location.reload();
+        }
+      },
       renderAll: () => {
-        document.getElementById('meta-number').textContent = case_state.case_meta.number;
-        document.getElementById('overview-snapshot').innerHTML = case_state.case_meta.snapshot.map(s => `<li>${esc(s)}</li>`).join('');
-        document.getElementById('overview-parties').innerHTML = case_state.case_meta.parties.map(p => `<div><strong>${esc(p.role)}</strong>: ${esc(p.name)}</div>`).join('');
+        // Overview
+        document.getElementById('ov-doc-count').textContent = case_state.documents.length;
+        document.getElementById('ov-evt-count').textContent = case_state.timeline_events.length;
+        document.getElementById('ov-ev-count').textContent = case_state.evidence_items.length;
+        document.getElementById('audit-log-list').innerHTML = (case_state.audit_log || []).slice().reverse().map(l =>
+          `<div class="text-small" style="padding:4px 0; border-bottom:1px solid #eee;">
+                        <span style="font-weight:600">${new Date(l.ts).toLocaleTimeString()}</span> [${l.action}] ${esc(l.notes)}
+                     </div>`
+        ).join('');
+
+        // Entities
+        const e = case_state.entities || {};
+        const renderEntList = (list, id) => {
+          document.getElementById(`cnt-${id}`).textContent = (list || []).length;
+          document.getElementById(`list-${id}`).innerHTML = (list || []).slice(0, 50).map(x => `<li>${esc(x.name || x.value || x.type)} <span class="text-muted text-small">(${x.mentions.length})</span></li>`).join('');
+        };
+        renderEntList(e.people, 'people');
+        renderEntList(e.orgs, 'orgs');
+        renderEntList(e.locations, 'locations');
+        renderEntList(e.identifiers, 'ids');
+        renderEntList(e.dates, 'dates');
+
+        // Timeline
         app.renderTimeline(case_state.timeline_events);
-        document.getElementById('evidence-tbody').innerHTML = case_state.evidence_items.map(e => `<tr><td class="text-small"><code>${esc(e.id)}</code></td><td>${esc(e.desc)}</td><td class="text-small">${esc(e.date)}</td><td><span class="status st-${e.status}">${e.status}</span></td></tr>`).join('');
-        app.renderEmails(case_state.emails);
-        document.getElementById('downloads-container').innerHTML = case_state.downloads.map(d => `<div class="card"><h3>${esc(d.cat)}</h3><a href="${d.url}">${esc(d.title)}</a></div>`).join('');
+
+        // Evidence
+        evidenceUI.render();
+
+        // Ingest
         ingest.renderDocs();
-        proposals.render();
-        agentClient.renderStatus();
+
+        // Save
+        saveState();
       },
       renderTimeline: (events) => {
-        const sorted = [...events].sort((a, b) => new Date(b.date) - new Date(a.date));
-        document.getElementById('timeline-container').innerHTML = sorted.map(e => `<div class="card" style="padding:16px;"><div style="display:flex; justify-content:space-between;"><div><div class="text-small text-muted">${esc(e.date)}</div><strong>${esc(e.title)}</strong></div><span class="status st-destroyed">${esc(e.source)}</span></div><p class="text-small" style="margin-top:8px;">${esc(e.body)}</p></div>`).join('');
+        const sorted = [...(events || [])].sort((a, b) => new Date(b.datetime || b.date) - new Date(a.datetime || a.date));
+        document.getElementById('timeline-container').innerHTML = sorted.map(e => `
+                    <div class="card" style="padding:16px;">
+                        <div style="display:flex; justify-content:space-between;">
+                            <div>
+                                <div class="text-small text-muted">${esc(e.datetime || e.date)}</div>
+                                <strong>${esc(e.summary)}</strong>
+                            </div>
+                        </div>
+                        <p class="text-small" style="margin-top:8px;">${esc(e.significance)}</p>
+                        <div style="margin-top:8px;">
+                            ${(e.tags || []).map(t => `<span class="chip" style="background:#F1F5F9;">${esc(t)}</span>`).join('')}
+                        </div>
+                        <div class="text-small text-muted" style="margin-top:8px; font-family:monospace;">
+                           ${(e.citations || []).map(c => `[${esc(c.doc_id)}:p${c.page}]`).join(' ')}
+                        </div>
+                    </div>`).join('');
+      }
+    };
+
+    // --- EVIDENCE UI ---
+    const evidenceUI = {
+      sortField: 'date',
+      sortDesc: true,
+
+      sort: (field) => {
+        if (evidenceUI.sortField === field) evidenceUI.sortDesc = !evidenceUI.sortDesc;
+        else { evidenceUI.sortField = field; evidenceUI.sortDesc = false; }
+        evidenceUI.render();
       },
-      filterTimeline: (val) => app.renderTimeline(case_state.timeline_events.filter(e => (e.title + e.body).toLowerCase().includes(val.toLowerCase()))),
-      renderEmails: (emails) => document.getElementById('emails-container').innerHTML = emails.map(e => `<div class="card" style="padding:16px;"><strong>${esc(e.subject)}</strong><div class="text-small text-muted">From: ${esc(e.from)}</div><p class="text-small">${esc(e.snippet)}</p></div>`).join(''),
-      filterEmails: (val) => app.renderEmails(case_state.emails.filter(e => (e.subject + e.body).toLowerCase().includes(val.toLowerCase())))
+
+      viewQuote: (encoded) => {
+        const quote = decodeURIComponent(encoded);
+        document.getElementById('modal-quote').innerText = quote;
+        document.getElementById('modal-overlay').style.display = 'flex';
+      },
+
+      render: () => {
+        let all = [...(case_state.evidence_items || [])];
+
+        // Sort
+        all.sort((a, b) => {
+          const fa = (a[evidenceUI.sortField] || '').toString().toLowerCase();
+          const fb = (b[evidenceUI.sortField] || '').toString().toLowerCase();
+          if (fa < fb) return evidenceUI.sortDesc ? 1 : -1;
+          if (fa > fb) return evidenceUI.sortDesc ? -1 : 1;
+          return 0;
+        });
+
+        const tbody = document.getElementById('evidence-tbody');
+        tbody.innerHTML = all.map(e => {
+          const date = e.date || 'Unknown';
+          const people = (e.people || []).map(p => `<span class="chip">${esc(p)}</span>`).join('');
+          const tags = (e.tags || []).map(t => `<span class="chip" style="background:#F1F5F9;">${esc(t)}</span>`).join('');
+
+          // Citation
+          let src = '-';
+          let quote = '';
+          if (e.citations && e.citations.length > 0) {
+            const c = e.citations[0];
+            src = `${esc(c.doc_id)}:p${c.page}`;
+            quote = encodeURIComponent(c.quote);
+          }
+
+          let actions = '';
+          if (quote) {
+            actions += `<button class="btn-xs" onclick="evidenceUI.viewQuote('${quote}')">View Quote</button> `;
+          }
+
+          return `
+                <tr>
+                  <td>${esc(date)}</td>
+                  <td>${esc(e.type)}</td>
+                  <td>${esc(e.title)}</td>
+                  <td>${people}</td>
+                  <td>${tags}</td>
+                  <td class="text-small text-muted">${src}</td>
+                  <td>${actions}</td>
+                </tr>`;
+        }).join('');
+      }
     };
 
     // --- AGENT INTEGRATION ---
@@ -624,180 +789,91 @@
         localStorage.setItem('CASE_PORTAL_TOKEN', val);
         document.getElementById('token-status').textContent = 'Saved locally';
         document.getElementById('token-status').style.color = 'var(--color-success)';
+      },
+      addTestDoc: () => {
+        const id = document.getElementById('test-doc-id').value.trim();
+        const fn = document.getElementById('test-filename').value.trim();
+        const pg = parseInt(document.getElementById('test-page').value) || 1;
+        const text = document.getElementById('test-text').value.trim();
+
+        if (!id || !fn || !text) return alert('Fill all fields');
+
+        let doc = case_state.documents.find(d => d.doc_id === id);
+        if (!doc) {
+          doc = { doc_id: id, filename: fn, pages: [], status: 'parsed' };
+          case_state.documents.push(doc);
+        }
+        // Remove page if exists
+        doc.pages = doc.pages.filter(p => p.page !== pg);
+        doc.pages.push({ page: pg, text: text });
+
+        showToast('Test Doc Added');
+        app.renderAll();
       }
     };
 
     const agentClient = {
-      addMsg: (role, text) => {
-        const d = document.getElementById('agent-chat');
-        d.innerHTML += `<div class="chat-msg"><span class="msg-${role}">${role}:</span> ${esc(text)}</div>`;
-        d.scrollTop = d.scrollHeight;
+      runFullBuild: async () => {
+        const steps = ['extract_entities', 'propose_timeline_events', 'propose_evidence_items'];
+        for (const step of steps) {
+          await agentClient.runBuild(step, { silentToast: true });
+        }
+        showToast('Full Build Complete');
       },
 
-      runStep: async () => {
+      runBuild: async (action, opts = {}) => {
         const token = localStorage.getItem('CASE_PORTAL_TOKEN');
-        if (!token) return alert('Please set API Token');
+        if (!token) return alert('Please set API Token first.');
 
-        agentClient.addMsg('user', 'Run Agent Step...');
+        if (!opts.silentToast) showToast(`Running ${action}...`);
+
         try {
           const res = await fetch(`${WORKER_BASE}/api/agent/step`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json', 'X-Case-Portal-Token': token },
-            body: JSON.stringify({ ping: true, case_state })
+            body: JSON.stringify({
+              action: action,
+              case_state: case_state,
+              agent_config: { max_docs: 5, max_pages_per_doc: 10 }
+            })
           });
-          const text = await res.text();
-          let data;
-          try { data = JSON.parse(text); } catch { data = { message: text }; }
 
           if (!res.ok) {
-            agentClient.addMsg('agent', `Error ${res.status}: ${JSON.stringify(data)}`);
+            const txt = await res.text();
+            alert(`Agent Error ${res.status}: ${txt}`);
             return;
           }
-          agentClient.handleResponse(data);
-        } catch (e) {
-          agentClient.addMsg('agent', `Network Error: ${e.message}`);
-        }
-      },
 
-      sendChat: async () => {
-        const inp = document.getElementById('chat-input');
-        const txt = inp.value.trim();
-        if (!txt) return;
-
-        const token = localStorage.getItem('CASE_PORTAL_TOKEN');
-        if (!token) return alert('Please set API Token');
-
-        agentClient.addMsg('user', txt);
-        inp.value = '';
-
-        try {
-          // Note: Assuming chat also goes to the worker, referencing WORKER_BASE
-          // If the worker doesn't support chat, this might fail, but consistent with runStep.
-          // For now, let's try the same endpoint pattern or keep it relative if chat is separate.
-          // User only specified runStep. I will point this to WORKER_BASE/api/agent/chat assuming symmetry.
-          const res = await fetch(`${WORKER_BASE}/api/agent/chat`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json', 'X-Case-Portal-Token': token },
-            body: JSON.stringify({ message: txt, case_state: case_state })
-          });
           const data = await res.json();
-          agentClient.handleResponse(data);
+          document.getElementById('agent-json-viewer').textContent = JSON.stringify(data, null, 2);
+
+          if (data.ok) {
+            // Update State directly
+            if (action === 'extract_entities' && data.proposals.entities) {
+              case_state.entities = data.proposals.entities;
+              showToast('Entities Updated');
+            }
+            if (action === 'propose_timeline_events' && data.proposals.timeline_events) {
+              case_state.timeline_events = data.proposals.timeline_events;
+              showToast('Timeline Updated');
+            }
+            if (action === 'propose_evidence_items' && data.proposals.evidence_items) {
+              case_state.evidence_items = data.proposals.evidence_items;
+              showToast('Evidence Index Updated');
+            }
+
+            if (data.audit_log_entry) {
+              if (!case_state.audit_log) case_state.audit_log = [];
+              case_state.audit_log.push(data.audit_log_entry);
+            }
+
+            app.renderAll();
+          } else {
+            alert(`Agent returned error: ${JSON.stringify(data.error)}`);
+          }
         } catch (e) {
-          agentClient.addMsg('agent', `Error: ${e.message}`);
+          alert(`Network Error: ${e.message}`);
         }
-      },
-
-      handleResponse: (data) => {
-        if (data.message) agentClient.addMsg('agent', data.message);
-
-        // 1. Merge Entities
-        if (data.entities) {
-          if (!case_state.entities) case_state.entities = {};
-          ['people', 'orgs', 'locations', 'identifiers', 'dates'].forEach(cat => {
-            const incoming = data.entities[cat] || [];
-            const current = case_state.entities[cat] || [];
-            incoming.forEach(inc => {
-              const key = inc.name || inc.value;
-              const exists = current.find(c => (c.name || c.value) === key);
-              if (exists) {
-                if (inc.mentions) exists.mentions = [...(exists.mentions || []), ...inc.mentions];
-              } else {
-                current.push(inc);
-              }
-            });
-            case_state.entities[cat] = current;
-          });
-
-          // 2. Merge Proposals
-          if (data.entities.proposed_timeline_events) {
-            data.entities.proposed_timeline_events.forEach(te => {
-              case_state.proposals.timeline.push({
-                id: `PROP-T-AI-${Math.floor(Math.random() * 10000)}`,
-                date: te.datetime,
-                title: te.summary.substring(0, 50) + (te.summary.length > 50 ? '...' : ''),
-                source: 'AI Agent',
-                body: `${te.summary}\n\nSignificance: ${te.significance}`,
-                tags: te.source_tags,
-                citation: te.citations ? te.citations[0] : null
-              });
-            });
-          }
-
-          if (data.entities.proposed_evidence_items) {
-            data.entities.proposed_evidence_items.forEach(ei => {
-              case_state.proposals.evidence.push({
-                id: `PROP-E-AI-${Math.floor(Math.random() * 10000)}`,
-                desc: ei.title,
-                status: ei.status,
-                date: 'Unknown',
-                citation: ei.citations ? ei.citations[0] : null
-              });
-            });
-          }
-          app.renderAll();
-        }
-
-        document.getElementById('agent-json-viewer').textContent = JSON.stringify(data, null, 2);
-
-        if (data.agent_status) {
-          case_state.agent_status = data.agent_status;
-          agentClient.renderStatus();
-        }
-      },
-
-      renderStatus: () => {
-        const s = case_state.agent_status;
-        const panel = document.getElementById('agent-status-panel');
-        if (!s || !s.last_run_ts) { panel.textContent = "No run data."; return; }
-
-        panel.innerHTML = `
-            <div><strong>Last Run:</strong> ${s.last_run_ts}</div>
-            <div><strong>Active Tasks:</strong> ${s.tasks ? s.tasks.length : 0}</div>
-            <ul style="margin:4px 0; padding-left:16px;">
-                ${(s.tasks || []).map(t => `<li>${esc(t)}</li>`).join('')}
-            </ul>
-        `;
-      }
-    };
-
-    // --- REST OF MODULES (HEURISTICS, INGEST, PROPOSALS) ---
-    // Copied from previous steps to maintain functionality
-    const heuristicEngine = {
-      docTypes: [
-        { type: "Report", keywords: ["incident", "police report", "narrative"] },
-        { type: "CAD", keywords: ["call details", "dispatch"] },
-        { type: "Email", keywords: ["from:", "to:", "subject:"] },
-        { type: "Court", keywords: ["plaintiff", "case no"] },
-        { type: "Statute", keywords: ["§", "statute"] }
-      ],
-      classifyDocument: (doc) => {
-        let text = doc.pages.map(p => p.text).join(' ').toLowerCase();
-        let scores = heuristicEngine.docTypes.map(t => {
-          let score = 0; t.keywords.forEach(k => { if (text.includes(k)) score++; });
-          return { type: t.type, score };
-        });
-        scores.sort((a, b) => b.score - a.score);
-        return { type: scores[0].score > 0 ? scores[0].type : "Other", confidence: scores[0].score > 2 ? "High" : "Low" };
-      },
-      detectDates: (text) => {
-        const regex = /(\b\d{4}-\d{2}-\d{2}\b)|(\b\d{1,2}\/\d{1,2}\/\d{2,4}\b)/gi;
-        return [...new Set(text.match(regex) || [])];
-      },
-      detectIdentifiers: (text) => {
-        const patterns = [{ l: "Case #", r: /(?:case|cause)\s*(?:no|num|#)[\s.:]*([a-z0-9-]+)/i }];
-        let ids = []; patterns.forEach(p => { const m = text.match(p.r); if (m) ids.push({ label: p.l, value: m[1] }); });
-        return ids;
-      },
-      generateProposals: (docs) => {
-        let evs = [], tls = [];
-        docs.forEach(doc => {
-          const type = doc.user_type_override || doc.analysis.type_guess || 'Doc';
-          const fullText = doc.pages.map(p => p.text).join('\n');
-          const dates = heuristicEngine.detectDates(fullText);
-          evs.push({ id: `PROP-E-${Math.floor(Math.random() * 1000)}`, desc: doc.filename.replace('.pdf', ''), status: 'produced', date: dates[0] || 'Unknown', citation: { doc_id: doc.doc_id, page: 1 } });
-          if (dates.length > 0) tls.push({ id: `PROP-T-${Math.floor(Math.random() * 1000)}`, date: dates[0], title: `${type} Event`, source: type, body: `Extracted from ${doc.filename}`, tags: ['extracted'], citation: { doc_id: doc.doc_id, page: 1 } });
-        });
-        return { evidence: evs, timeline: tls };
       }
     };
 
@@ -811,14 +887,8 @@
             if (file.type === 'application/pdf' && window.pdfjsLib) await ingest.extractPDF(file, docEntry);
             else docEntry.status = 'skipped';
           } catch (err) { docEntry.status = 'failed'; }
-
-          if (docEntry.pages.length > 0) {
-            const ft = docEntry.pages.map(p => p.text).join('\n');
-            const c = heuristicEngine.classifyDocument(docEntry);
-            docEntry.analysis = { type_guess: c.type, confidence: c.confidence, dates: heuristicEngine.detectDates(ft), ids: heuristicEngine.detectIdentifiers(ft) };
-            docEntry.user_type_override = c.type;
-          }
           ingest.renderDocs();
+          app.renderAll();
         }
       },
       extractPDF: async (file, docEntry) => {
@@ -829,49 +899,13 @@
         }
         docEntry.status = `parsed (${pdf.numPages} pgs)`;
       },
-      updateType: (id, t) => { const d = case_state.documents.find(x => x.doc_id === id); if (d) d.user_type_override = t; },
       renderDocs: () => {
         document.getElementById('doc-list').innerHTML = case_state.documents.map(d => `
             <div class="card" style="padding:16px; display:flex; justify-content:space-between;">
                 <div><div style="font-weight:600">${esc(d.filename)}</div><div class="text-small text-muted">${esc(d.doc_id)} • ${d.status}</div></div>
-                <div><select class="select-input" onchange="ingest.updateType('${d.doc_id}', this.value)">${["Report", "CAD", "Email", "Court", "Statute", "Other"].map(t => `<option value="${t}" ${d.user_type_override === t ? 'selected' : ''}>${t}</option>`).join('')}</select></div>
             </div>`).join('');
       }
     };
-
-    const proposals = {
-      rebuild: () => {
-        const p = heuristicEngine.generateProposals(case_state.documents);
-        case_state.proposals = p; proposals.render();
-      },
-      accept: (type, id) => {
-        const list = type === 'evidence' ? case_state.proposals.evidence : case_state.proposals.timeline;
-        const idx = list.findIndex(i => i.id === id); if (idx === -1) return;
-        const item = list[idx];
-        if (type === 'evidence') { item.id = `EXH-${Math.floor(Math.random() * 1000)}`; case_state.evidence_items.push(item); }
-        else case_state.timeline_events.push(item);
-        list.splice(idx, 1); app.renderAll();
-      },
-      reject: (type, id) => {
-        const list = type === 'evidence' ? case_state.proposals.evidence : case_state.proposals.timeline;
-        const idx = list.findIndex(i => i.id === id); if (idx > -1) list.splice(idx, 1); proposals.render();
-      },
-      render: () => {
-        document.getElementById('prop-evidence-count').textContent = case_state.proposals.evidence.length;
-        document.getElementById('prop-timeline-count').textContent = case_state.proposals.timeline.length;
-        document.getElementById('prop-evidence-list').innerHTML = case_state.proposals.evidence.map(e => `
-            <div class="card" style="padding:16px; margin-bottom:12px;"><strong>${esc(e.desc)}</strong> <div class="text-small">${esc(e.date)}</div>
-            <div style="margin-top:8px;"><button class="btn-xs btn-accept" onclick="proposals.accept('evidence','${e.id}')">Accept</button> <button class="btn-xs btn-reject" onclick="proposals.reject('evidence','${e.id}')">Reject</button></div></div>`).join('');
-        document.getElementById('prop-timeline-list').innerHTML = case_state.proposals.timeline.map(e => `
-            <div class="card" style="padding:16px; margin-bottom:12px;"><strong>${esc(e.date)}: ${esc(e.title)}</strong><p class="text-small">${esc(e.body)}</p>
-            <div style="margin-top:8px;"><button class="btn-xs btn-accept" onclick="proposals.accept('timeline','${e.id}')">Accept</button> <button class="btn-xs btn-reject" onclick="proposals.reject('timeline','${e.id}')">Reject</button></div></div>`).join('');
-      }
-    };
-
-    function exportData() {
-      const blob = new Blob([JSON.stringify(case_state, null, 2)], { type: 'application/json' });
-      const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'case_data.json'; a.click();
-    }
 
     const box = document.getElementById('drop-zone');
     box.addEventListener('dragover', e => { e.preventDefault(); box.classList.add('active'); });
