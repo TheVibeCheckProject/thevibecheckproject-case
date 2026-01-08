@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Timeline | Vibe Check</title>
+    <meta name="robots" content="noindex,nofollow" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+
+<body>
+    <div class="container animate-enter">
+
+        <!-- Navbar / Header -->
+        <div class="row"
+            style="justify-content: space-between; margin-bottom: var(--space-8); align-items: flex-start;">
+            <div>
+                <div class="badge">Chronological Record</div>
+                <h1>Timeline of Events</h1>
+                <p class="text-muted">Click any entry to view significance and analysis.</p>
+            </div>
+            <div>
+                <a href="/case/" class="btn">Back to Overview</a>
+            </div>
+        </div>
+
+        <!-- Timeline Component -->
+        <div class="timeline" id="timeline-container">
+
+            <!-- Entry 1 -->
+            <div class="timeline-item">
+                <div class="timeline-marker"></div>
+                <div class="timeline-card">
+                    <div class="timeline-header">
+                        <div>
+                            <span class="timeline-date">DEC 12, 2023 • 09:15 AM</span>
+                            <div class="timeline-title">Initial Vibe Drift Detected in Breakroom</div>
+                        </div>
+                        <span class="tag tag-report">Report</span>
+                    </div>
+                    <div class="timeline-body">
+                        <p class="text-small text-muted mb-2"><strong>Significance</strong></p>
+                        <p class="mb-2">First documented instance of "bad vibes." Witness noted Defendant changed the
+                            communal Spotify playlist from "Lo-Fi Beats" to "Speed Metal" without consensus.</p>
+                        <p class="text-small text-muted">Source: Incident Report #442</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Entry 2 -->
+            <div class="timeline-item">
+                <div class="timeline-marker"></div>
+                <div class="timeline-card">
+                    <div class="timeline-header">
+                        <div>
+                            <span class="timeline-date">DEC 14, 2023 • 14:00 PM</span>
+                            <div class="timeline-title">Email: "Re: The Tone of Slack Messages"</div>
+                        </div>
+                        <span class="tag tag-email">Email</span>
+                    </div>
+                    <div class="timeline-body">
+                        <p class="text-small text-muted mb-2"><strong>Significance</strong></p>
+                        <p class="mb-2">Plaintiff sent a gently worded email requesting more emojis in daily standup
+                            updates. Defendant responded with a single "thumbs up" reaction, widely interpreted as
+                            passive-aggressive.</p>
+                        <p class="text-small text-muted">Source: Production Set A - EML_004</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Entry 3 -->
+            <div class="timeline-item">
+                <div class="timeline-marker"></div>
+                <div class="timeline-card">
+                    <div class="timeline-header">
+                        <div>
+                            <span class="timeline-date">DEC 20, 2023 • 11:30 AM</span>
+                            <div class="timeline-title">Emergency Meeting Called (The "Vibe Shift")</div>
+                        </div>
+                        <span class="tag tag-cad">CAD</span>
+                    </div>
+                    <div class="timeline-body">
+                        <p class="text-small text-muted mb-2"><strong>Significance</strong></p>
+                        <p class="mb-2">Security logs show 40% of the engineering team left the building for an
+                            unscheduled "coffee walk" simultaneously. This correlates with the reported drop in office
+                            morale.</p>
+                        <p class="text-small text-muted">Source: Building Access Logs</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Entry 4 -->
+            <div class="timeline-item">
+                <div class="timeline-marker"></div>
+                <div class="timeline-card">
+                    <div class="timeline-header">
+                        <div>
+                            <span class="timeline-date">JAN 05, 2024</span>
+                            <div class="timeline-title">Formal Complaint Filed</div>
+                        </div>
+                        <span class="tag tag-statute">Court</span>
+                    </div>
+                    <div class="timeline-body">
+                        <p class="text-small text-muted mb-2"><strong>Significance</strong></p>
+                        <p class="mb-2">Plaintiff initiates legal action citing "Irreconcilable Vibe Differences."</p>
+                        <p class="text-small text-muted">Source: Dkt. 1</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        // Event Delegation for Accordion Logic
+        document.getElementById('timeline-container').addEventListener('click', function (e) {
+            // Find closest header if clicked
+            const header = e.target.closest('.timeline-header');
+            if (!header) return;
+
+            const item = header.closest('.timeline-item');
+
+            // Toggle current
+            const wasOpen = item.classList.contains('is-open');
+
+            // Optional: Close others (accordian style) - Remove this block to allow multiple open
+            document.querySelectorAll('.timeline-item').forEach(el => {
+                el.classList.remove('is-open');
+            });
+
+            if (!wasOpen) {
+                item.classList.add('is-open');
+            }
+        });
+    </script>
+</body>
+
+</html>

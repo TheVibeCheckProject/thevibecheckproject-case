@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Evidence Index | Vibe Check</title>
+    <meta name="robots" content="noindex,nofollow" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+
+<body>
+    <div class="container animate-enter">
+
+        <!-- Navbar / Header -->
+        <div class="row"
+            style="justify-content: space-between; margin-bottom: var(--space-8); align-items: flex-start;">
+            <div>
+                <div class="badge">Discovery Tracker</div>
+                <h1>Evidence Index</h1>
+                <p class="text-muted">Master list of produced and requested exhibits.</p>
+            </div>
+            <div>
+                <a href="/case/" class="btn">Back to Overview</a>
+            </div>
+        </div>
+
+        <!-- Evidence Table -->
+        <div class="table-container">
+            <table class="data-table" id="evidence-table">
+                <thead>
+                    <tr>
+                        <th onclick="sortTable(0)">Exhibit ID</th>
+                        <th onclick="sortTable(1)">Description</th>
+                        <th onclick="sortTable(2)">Date</th>
+                        <th onclick="sortTable(3)">Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Row 1 -->
+                    <tr>
+                        <td class="text-small">
+                            <code>EXH-001</code>
+                        </td>
+                        <td>
+                            <span style="font-weight: 500;">Spotify Playlist History (2023)</span>
+                            <div class="text-small text-muted">CSV export of all played tracks in common area.</div>
+                        </td>
+                        <td class="text-small text-muted" data-val="2023-12-01">Dec 01, 2023</td>
+                        <td><span class="status status-produced">Produced</span></td>
+                        <td><a href="#" class="text-small" style="color: var(--color-link);">Download</a></td>
+                    </tr>
+                    <!-- Row 2 -->
+                    <tr>
+                        <td class="text-small">
+                            <code>EXH-004</code>
+                        </td>
+                        <td>
+                            <span style="font-weight: 500;">Slack Logs: #random channel</span>
+                            <div class="text-small text-muted">JSON dump of messages containing "bad vibes".</div>
+                        </td>
+                        <td class="text-small text-muted" data-val="2023-12-14">Dec 14, 2023</td>
+                        <td><span class="status status-produced">Produced</span></td>
+                        <td><a href="#" class="text-small" style="color: var(--color-link);">Download</a></td>
+                    </tr>
+                    <!-- Row 3 -->
+                    <tr>
+                        <td class="text-small">
+                            <code>REQ-012</code>
+                        </td>
+                        <td>
+                            <span style="font-weight: 500;">Napkin Notes from Lunch</span>
+                            <div class="text-small text-muted">Alleged written agreement regarding snack budget.</div>
+                        </td>
+                        <td class="text-small text-muted" data-val="2023-11-20">Nov 20, 2023</td>
+                        <td><span class="status status-missing">Missing</span></td>
+                        <td><span class="text-small text-muted">—</span></td>
+                    </tr>
+                    <!-- Row 4 -->
+                    <tr>
+                        <td class="text-small">
+                            <code>EXH-009</code>
+                        </td>
+                        <td>
+                            <span style="font-weight: 500;">Security Camera Footage: Kitchen</span>
+                            <div class="text-small text-muted">Video evidence of the "Coffee Walk" incident.</div>
+                        </td>
+                        <td class="text-small text-muted" data-val="2023-12-20">Dec 20, 2023</td>
+                        <td><span class="status status-destroyed">Destroyed</span></td>
+                        <td><span class="text-small text-muted">N/A</span></td>
+                    </tr>
+                    <!-- Row 5 -->
+                    <tr>
+                        <td class="text-small">
+                            <code>EXH-002</code>
+                        </td>
+                        <td>
+                            <span style="font-weight: 500;">HR Policy: "Vibe Guidelines"</span>
+                            <div class="text-small text-muted">Employee handbook section 4.2.</div>
+                        </td>
+                        <td class="text-small text-muted" data-val="2023-01-10">Jan 10, 2023</td>
+                        <td><span class="status status-produced">Produced</span></td>
+                        <td><a href="#" class="text-small" style="color: var(--color-link);">Download</a></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+    <script>
+        // Sort Logic
+        let currentSort = { col: -1, dir: 'asc' };
+
+        function sortTable(n) {
+            var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+            table = document.getElementById("evidence-table");
+            switching = true;
+
+            // Reset header classes
+            const headers = table.querySelectorAll('th');
+            headers.forEach(h => h.classList.remove('asc', 'desc'));
+
+            // Toggle info
+            if (currentSort.col === n && currentSort.dir === 'asc') {
+                dir = "desc";
+                currentSort.dir = 'desc';
+            } else {
+                dir = "asc";
+                currentSort.dir = 'asc';
+            }
+            currentSort.col = n;
+            headers[n].classList.add(dir);
+
+            while (switching) {
+                switching = false;
+                rows = table.rows;
+                /* Loop through all table rows (except the first, which contains table headers): */
+                for (i = 1; i < (rows.length - 1); i++) {
+                    shouldSwitch = false;
+
+                    x = rows[i].getElementsByTagName("TD")[n];
+                    y = rows[i + 1].getElementsByTagName("TD")[n];
+
+                    // Use data-val if available (for dates), else innerHTML
+                    let xVal = x.getAttribute('data-val') || x.innerText.toLowerCase();
+                    let yVal = y.getAttribute('data-val') || y.innerText.toLowerCase();
+
+                    if (dir == "asc") {
+                        if (xVal > yVal) {
+                            shouldSwitch = true;
+                            break;
+                        }
+                    } else if (dir == "desc") {
+                        if (xVal < yVal) {
+                            shouldSwitch = true;
+                            break;
+                        }
+                    }
+                }
+                if (shouldSwitch) {
+                    rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                    switching = true;
+                    switchcount++;
+                }
+            }
+        }
+    </script>
+</body>
+
+</html>

@@ -1,17 +1,171 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Case Portal</title>
-  <meta http-equiv="refresh" content="0; url=/" />
+  <title>Case Overview | Vibe Check</title>
+  <meta name="robots" content="noindex,nofollow" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="../css/style.css">
+
   <style>
-    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial,sans-serif;margin:40px;line-height:1.6}
-    .muted{color:#6b7280}
+    /* Specific overrides for this page */
+    .grid-dashboard {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: var(--space-6);
+      margin-top: var(--space-6);
+    }
+
+    @media (max-width: 768px) {
+      .grid-dashboard {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .status-dot {
+      height: 8px;
+      width: 8px;
+      border-radius: 50%;
+      display: inline-block;
+      margin-right: 6px;
+    }
+
+    .bg-green {
+      background: var(--color-success);
+    }
+
+    .bg-red {
+      background: var(--color-danger);
+    }
+
+    .bg-amber {
+      background: var(--color-warning);
+    }
   </style>
 </head>
+
 <body>
-  <p class="muted">Redirecting to the private case portal…</p>
-  <p class="muted">If you are not redirected, <a href="/">click here</a>.</p>
+  <div class="container animate-enter">
+    <!-- Header -->
+    <div class="row" style="justify-content: space-between; margin-bottom: var(--space-8);">
+      <div>
+        <div class="badge"><span class="status-dot bg-green"></span>Active Remediation</div>
+        <h1>The Vibe Check Project</h1>
+        <p class="text-muted">Case #2024-VC-001 • Updated 2 hours ago</p>
+      </div>
+      <div>
+        <a href="/" class="btn">Back to Portal</a>
+      </div>
+    </div>
+
+    <!-- Top Row: Parties & Dates -->
+    <div class="grid" style="margin-top: 0; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));">
+      <div class="card animate-enter delay-1">
+        <div class="card-header">
+          <h2>Parties</h2>
+        </div>
+        <div class="mb-4">
+          <div class="text-small text-muted">PLAINTIFF</div>
+          <div style="font-weight: 500;">Vibe Check Corp.</div>
+        </div>
+        <div>
+          <div class="text-small text-muted">DEFENDANT</div>
+          <div style="font-weight: 500;">Bad Vibes LLC</div>
+        </div>
+      </div>
+
+      <div class="card animate-enter delay-1">
+        <div class="card-header">
+          <h2>Key Dates</h2>
+        </div>
+        <div class="row"
+          style="margin-top:0; justify-content: space-between; border-bottom: 1px solid var(--color-border-subtle); padding-bottom: 8px; margin-bottom: 8px;">
+          <span class="text-small">Complaint Filed</span>
+          <span class="text-small" style="font-variant-numeric: tabular-nums;">Jan 10, 2024</span>
+        </div>
+        <div class="row" style="margin-top:0; justify-content: space-between; color: var(--color-warning);">
+          <span class="text-small" style="font-weight: 500;">Discovery Deadline</span>
+          <span class="text-small" style="font-variant-numeric: tabular-nums;">Feb 14, 2024</span>
+        </div>
+      </div>
+
+      <div class="card animate-enter delay-1">
+        <div class="card-header">
+          <h2>Status</h2>
+        </div>
+        <p class="text-muted text-small">Discovery is currently open. Focus is on internal communications regarding the
+          "Vibe Shift" event.</p>
+      </div>
+    </div>
+
+    <!-- Main Content Grid -->
+    <div class="grid-dashboard">
+
+      <!-- Left: Incident Summary -->
+      <div class="card animate-enter delay-2" style="height: fit-content;">
+        <div class="card-header">
+          <h2>Incident Summary</h2>
+        </div>
+        <p class="mb-4">
+          On or about December 2023, the Defendant allegedly introduced "bad vibes" into the shared workspace ecosystem.
+          This resulted in a palpable decrease in team morale and productivity, quantitatively measured as a 40% drop in
+          "stoke levels."
+        </p>
+        <p class="mb-4">
+          Plaintiff asserts these actions constitute a breach of the unspoken social contract regarding office playlist
+          dominance and snack equity.
+        </p>
+        <div class="badge">Fact Pattern A</div>
+        <div class="badge">Fact Pattern B</div>
+      </div>
+
+      <!-- Right: Evidence & Issues -->
+      <div style="display: flex; flex-direction: column; gap: var(--space-6);">
+
+        <div class="card animate-enter delay-3">
+          <div class="card-header">
+            <h2>Evidence Status</h2>
+          </div>
+          <div class="row"
+            style="margin-top:0; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+            <span class="text-small">Slack Logs</span>
+            <span class="badge"
+              style="margin:0; background: #ECFDF5; color: var(--color-success); border:none;">Produced</span>
+          </div>
+          <div class="row"
+            style="margin-top:0; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+            <span class="text-small">Spotify Historics</span>
+            <span class="badge"
+              style="margin:0; background: #FEF3C7; color: var(--color-warning); border:none;">Pending</span>
+          </div>
+          <div class="row" style="margin-top:0; align-items: center; justify-content: space-between;">
+            <span class="text-small">Napkin Notes</span>
+            <span class="badge"
+              style="margin:0; background: #FEE2E2; color: var(--color-danger); border:none;">Missing</span>
+          </div>
+        </div>
+
+        <div class="card animate-enter delay-3">
+          <div class="card-header">
+            <h2>Legal Issues</h2>
+          </div>
+          <ul style="padding-left: 20px; font-size: 14px;">
+            <li>Implied Warranty of Chillness</li>
+            <li>Intentional Infliction of Boredom</li>
+            <li>Tortious Interference with Vibe</li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
 </body>
+
 </html>

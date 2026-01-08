@@ -1,30 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Private Case Portal</title>
   <meta name="robots" content="noindex,nofollow" />
-  <style>
-    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial,sans-serif;margin:40px;line-height:1.6}
-    .wrap{max-width:980px}
-    .pill{display:inline-block;padding:6px 10px;border-radius:999px;background:#f3f4f6;font-size:12px;margin-bottom:10px}
-    .grid{display:grid;grid-template-columns:1fr;gap:16px;margin-top:18px}
-    .card{border:1px solid #e5e7eb;border-radius:16px;padding:18px}
-    .muted{color:#6b7280}
-    a{color:inherit}
-    .btn{display:inline-block;border:1px solid #e5e7eb;padding:10px 14px;border-radius:12px;text-decoration:none}
-    .btn:hover{background:#f9fafb}
-    .row{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
-    code{background:#f3f4f6;padding:2px 6px;border-radius:8px}
-    ul{margin:8px 0 0 18px}
-  </style>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/style.css">
 </head>
+
 <body>
-  <div class="wrap">
-    <div class="pill">Restricted • Cloudflare Access</div>
+  <div class="container">
+    <div class="badge">Restricted • Cloudflare Access</div>
     <h1>Private Case Portal</h1>
-    <p class="muted">Invite-only case review workspace. If you reached this page, you passed Access.</p>
+    <p class="text-muted mt-2">Invite-only case review workspace. If you reached this page, you passed Access.</p>
 
     <div class="row">
       <a class="btn" href="/case/">Open /case/ route</a>
@@ -40,13 +34,15 @@
           <li><strong>Correspondence</strong> (coming next)</li>
           <li><strong>Downloads</strong> (PDFs, exhibits)</li>
         </ul>
-        <p class="muted">Last updated: <span id="d"></span></p>
+        <p class="text-muted text-small mt-4">Last updated: <span id="d"></span></p>
       </div>
 
       <div class="card">
         <h2>Reviewer instructions</h2>
-        <p class="muted">
+        <p class="text-muted mb-2">
           This portal is protected by Cloudflare Access. Reviewers must authenticate to view anything.
+        </p>
+        <p class="text-muted">
           If you ever see a 404 after login, use <code>/</code> or <code>/case/</code>.
         </p>
       </div>
@@ -57,4 +53,5 @@
     document.getElementById('d').textContent = new Date().toLocaleString();
   </script>
 </body>
+
 </html>
